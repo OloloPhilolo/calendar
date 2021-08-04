@@ -1,0 +1,228 @@
+<html>
+	<head>
+		<title>Лингвистический календарь</title>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<style>
+		    body {
+				background-color: #f3e9dc;
+			}
+			.base {
+				height: 100%;
+			}
+			.cntnr {
+			    height: auto;
+				min-height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		    .bckg {
+				min-width: 31em;
+				max-width: 80%;
+			}
+			.hdr {
+			  font-family: Verdana;
+			  color: #514d4d;
+			  text-transform: uppercase;
+			  text-align: center;
+			  font-weight: bold;
+			  font-size: 3em;
+			  padding-top: 0.5em;
+			  padding-bottom: 0.5em;
+			}
+			.prg {
+			  font-family: Verdana;
+			  color: #514d4d;
+			  text-align: center;
+			  font-size: 1.5em;
+			}
+			.prg a {
+			  color: #c08552;
+			}
+			.inpt-pnl {
+				margin: auto;
+				width: 30.5em;
+			}
+			.inpt {
+			  font-family: Verdana;
+			  color: #514d4d;
+			  text-transform: uppercase;
+			  text-align: center;
+			  font-weight: bold;
+			  font-size: 3em;
+			  background-color: #fcddc9;
+			  border: 2px solid #514d4d;
+			  margin-top: 0.5em;
+			  margin-bottom: 0.5em;
+			}
+			#d-inpt {
+				width: 3em;
+			}
+			#m-inpt {
+				width: 7em;
+			}
+			.btn {
+			  font-family: Verdana;
+			  color: #514d4d;
+			  text-transform: uppercase;
+			  text-align: center;
+			  font-weight: bold;
+			  font-size: 3em;
+			  background-color: #f3e9dc;
+			  border: 2px solid #514d4d;
+			  width: 7em;
+			  margin: auto;
+			  margin-top: 0.5em;
+			  margin-bottom: 0.5em;
+			}
+			
+			.btn-hvr:hover {
+			  background-color: #fcddc9;
+			  cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+	<script>
+		$( document ).ready(function() {
+			var today = new Date();
+			var currentDay = String(today.getDate()).padStart(2, '0');
+			var currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+			var months = [ "января", "февраля", "марта", "апреля", "мая", "июня", 
+           "июля", "августа", "сентября", "октября", "ноября", "декабря" ];
+
+			var loadedList = [];
+			var index = 0;
+			
+			function buildTemplate(title, description) {
+			    $("body").html("");
+				$("body").append("<div class='base'></div>");
+				$(".base").append("<div class='cntnr'></div>");
+				$(".cntnr").append("<div class='bckg'></div>");
+				$(".bckg").append("<div class='hdr'></div>");
+				$(".hdr").html(title);
+				$(".bckg").append("<div class='prg'></div>");
+				$(".prg").html(description);
+			}
+			
+			function buildHome() {
+				buildTemplate("Лингво<br>календарь", "Добро пожаловать в Лингвистический календарь! Здесь вы можете узнать, какие события произошли в языкознании в этот день. Просто введите интересующие вас день и месяц в окошки ниже и нажмите на кнопку поиска.");
+				$(".bckg").append("<div class='inpt-pnl'></div>");
+				
+				$(".inpt-pnl").append("<input class='inpt' id='d-inpt' maxlength='2' />");
+				$(".inpt-pnl").append("<select class='inpt' id='m-inpt'></select>");
+				
+				$("#m-inpt").append("<option value='01'>января</option>");
+				$("#m-inpt").append("<option value='02'>февраля</option>");
+				$("#m-inpt").append("<option value='03'>марта</option>");
+				$("#m-inpt").append("<option value='04'>апреля</option>");
+				$("#m-inpt").append("<option value='05'>мая</option>");
+				$("#m-inpt").append("<option value='06'>июня</option>");
+				$("#m-inpt").append("<option value='07'>июля</option>");
+				$("#m-inpt").append("<option value='08'>августа</option>");
+				$("#m-inpt").append("<option value='09'>сентября</option>");
+				$("#m-inpt").append("<option value='10'>октября</option>");
+				$("#m-inpt").append("<option value='11'>ноября</option>");
+				$("#m-inpt").append("<option value='12'>декабря</option>");
+				
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='sbmt-btn'></div>");
+				$("#sbmt-btn").html("К дате");
+				
+				$("#d-inpt").val(currentDay);
+				$("#m-inpt").val(currentMonth);
+				
+				function isValidDay(value) {
+					return /^\d{1,2}/.test(value);
+				}
+				
+				$(".inpt").change(function() {
+					$(".inpt-pnl").css("background-color", "");
+				});
+				
+				$("#sbmt-btn").click(function() {
+					inDay = $("#d-inpt").val();
+					inMonth = $("#m-inpt").val();
+					if (isValidDay(inDay)) {
+						inDayNum = parseInt(inDay, 10);
+						inMonthNum = parseInt(inMonth, 10);
+						if (inDayNum > 0 &&
+							(
+								(inDayNum <= 29 && inMonthNum == 2) ||
+								(inDayNum <= 30 && new Set([4, 6, 9, 11]).has(inMonthNum)) ||
+								(inDayNum <= 31 && new Set([1, 3, 5, 7, 8, 10, 12]).has(inMonthNum))
+							)) {
+								currentDay = String(inDayNum).padStart(2, '0');
+								currentMonth = String(inMonthNum).padStart(2, '0');
+								buildEvent();
+								return;
+						}
+					}
+					$(".inpt-pnl").css("background-color", "#f08080");
+				});
+			}
+			
+			function buildEventPageWithTexts(title, description) {
+				buildTemplate(title, description);
+				$(".bckg").append("<div class='inpt-pnl'></div>");
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='bck-btn'></div>");
+				$("#bck-btn").html("🠔");
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='fwd-btn'></div>");
+				$("#fwd-btn").html("🠖");
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='cls-btn'></div>");
+				$("#cls-btn").html("×");
+				
+				if (index == 0) {
+					$("#bck-btn").removeClass("btn-hvr");
+					$("#bck-btn").css("background-color", "#D6CFCB");
+				} else {
+					$("#bck-btn").click(function() {
+						index = index - 1;
+						buildEventPage();
+					});
+				}
+				
+				if (index >= loadedList.length - 1) {
+					$("#fwd-btn").removeClass("btn-hvr");
+					$("#fwd-btn").css("background-color", "#D6CFCB");
+				} else {
+					$("#fwd-btn").click(function() {
+						index = index + 1;
+						buildEventPage();
+					});
+				}
+				
+				$("#cls-btn").click(function() {
+					buildHome();
+				});
+			}
+			
+			function buildEventPage() {
+				buildEventPageWithTexts(loadedList[index]['header'], loadedList[index]['text']);
+			}
+			
+			function buildEvent() {
+				var url = "https://raw.githubusercontent.com/OloloPhilolo/calendar/main/ru/" + currentMonth + "/" + currentDay + ".json";
+				$.getJSON( url, function( data ) {
+					loadedList = data;
+					index = 0;
+					buildEventPage();
+					}).fail(function(jqXHR) {
+						loadedList = 0;
+						items = [];
+						inDayNum = parseInt(currentDay, 10);
+						inMonthName = months[parseInt(currentMonth, 10) - 1];
+						title = inDayNum + " " + inMonthName;
+						if (jqXHR.status == 404) {
+							description = "Кажется, мы не знаем лингвистических событий, связанных с этим днём :(";
+						} else {
+							description = "Кажется, что-то пошло не так, и мы не смогли загрузить события, произошедшие в этот день :(";
+						}
+						buildEventPageWithTexts(title, description);
+					});
+			}
+			
+			buildHome();
+		});
+	</script>
+	</body>
+</html>
