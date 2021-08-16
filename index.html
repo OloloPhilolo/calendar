@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Лингвистический календарь</title>
@@ -109,8 +110,8 @@
 				buildTemplate("Лингво<br>календарь", "Добро пожаловать в Лингвистический календарь! Здесь вы можете узнать, какие события произошли в языкознании в этот день. Просто введите интересующие вас день и месяц в окошки ниже и нажмите на кнопку поиска.");
 				$(".bckg").append("<div class='inpt-pnl'></div>");
 				
-				$(".inpt-pnl").append("<input class='inpt' id='d-inpt' maxlength='2' />");
-				$(".inpt-pnl").append("<select class='inpt' id='m-inpt'></select>");
+				$(".inpt-pnl").append("<input class='inpt' id='d-inpt' maxlength='2' aria-label='День'/>");
+				$(".inpt-pnl").append("<select class='inpt' id='m-inpt' aria-label='Месяц'></select>");
 				
 				$("#m-inpt").append("<option value='01'>января</option>");
 				$("#m-inpt").append("<option value='02'>февраля</option>");
@@ -125,7 +126,7 @@
 				$("#m-inpt").append("<option value='11'>ноября</option>");
 				$("#m-inpt").append("<option value='12'>декабря</option>");
 				
-				$(".inpt-pnl").append("<div class='btn btn-hvr' id='sbmt-btn'></div>");
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='sbmt-btn' role='button' tabindex='0'></div>");
 				$("#sbmt-btn").html("К дате");
 				
 				$("#d-inpt").val(currentDay);
@@ -164,11 +165,11 @@
 			function buildEventPageWithTexts(title, description) {
 				buildTemplate(title, description);
 				$(".bckg").append("<div class='inpt-pnl'></div>");
-				$(".inpt-pnl").append("<div class='btn btn-hvr' id='bck-btn'></div>");
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='bck-btn' role='button' tabindex='0' aria-label='Назад'></div>");
 				$("#bck-btn").html("←");
-				$(".inpt-pnl").append("<div class='btn btn-hvr' id='fwd-btn'></div>");
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='fwd-btn' role='button' tabindex='0' aria-label='Далее'></div>");
 				$("#fwd-btn").html("→");
-				$(".inpt-pnl").append("<div class='btn btn-hvr' id='cls-btn'></div>");
+				$(".inpt-pnl").append("<div class='btn btn-hvr' id='cls-btn' role='button' tabindex='0' aria-label='Закрыть'></div>");
 				$("#cls-btn").html("×");
 				
 				if (index == 0) {
