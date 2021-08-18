@@ -172,7 +172,7 @@
 				buildTemplate(title, description);
 				$(".bckg").append("<div class='inpt-pnl'></div>");
 				
-				if (index == 0) {
+				if (index <= 0) {
 					$(".inpt-pnl").append("<div class='btn btn-off' id='bck-btn' aria-label='Назад'></div>");
 				} else {
 					$(".inpt-pnl").append("<button class='btn btn-hvr' id='bck-btn'aria-label='Назад'></button>");
@@ -212,8 +212,8 @@
 					index = 0;
 					buildEventPage();
 					}).fail(function(jqXHR) {
-						loadedList = 0;
-						items = [];
+						loadedList = [];
+						index = 0;
 						inDayNum = parseInt(currentDay, 10);
 						inMonthName = months[parseInt(currentMonth, 10) - 1];
 						title = inDayNum + " " + inMonthName;
